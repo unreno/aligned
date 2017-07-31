@@ -1,0 +1,34 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Sequence:</strong>
+  <%= @alignment.sequence %>
+</p>
+
+<p>
+  <strong>Flags:</strong>
+  <%= @alignment.flags %>
+</p>
+
+<p>
+  <strong>Reference:</strong>
+  <%= @alignment.reference %>
+</p>
+
+<p>
+  <strong>Chromosome:</strong>
+  <%= @alignment.chromosome %>
+</p>
+
+<p>
+  <strong>Position:</strong>
+  <%= @alignment.position %>
+</p>
+
+<p>
+  <strong>Cigar:</strong>
+  <%= @alignment.cigar %>
+</p>
+
+<%= link_to 'Edit', edit_alignment_path(@alignment) %> |
+<%= link_to 'Back', alignments_path %>

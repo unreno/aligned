@@ -1,0 +1,47 @@
+<%= form_with(model: alignment, local: true) do |form| %>
+  <% if alignment.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(alignment.errors.count, "error") %> prohibited this alignment from being saved:</h2>
+
+      <ul>
+      <% alignment.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :sequence %>
+    <%= form.text_field :sequence, id: :alignment_sequence %>
+  </div>
+
+  <div class="field">
+    <%= form.label :flags %>
+    <%= form.number_field :flags, id: :alignment_flags %>
+  </div>
+
+  <div class="field">
+    <%= form.label :reference %>
+    <%= form.text_field :reference, id: :alignment_reference %>
+  </div>
+
+  <div class="field">
+    <%= form.label :chromosome %>
+    <%= form.text_field :chromosome, id: :alignment_chromosome %>
+  </div>
+
+  <div class="field">
+    <%= form.label :position %>
+    <%= form.number_field :position, id: :alignment_position %>
+  </div>
+
+  <div class="field">
+    <%= form.label :cigar %>
+    <%= form.text_field :cigar, id: :alignment_cigar %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>

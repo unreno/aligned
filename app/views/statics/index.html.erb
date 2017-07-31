@@ -1,0 +1,24 @@
+<h1>Alignments</h1>
+
+<p>
+A reference was compiled and it was aligned to both hg19 and hg38.
+The results were stuffed into a database.
+</p>
+
+<pre>
+
+bowtie2 -x hg19 --no-unal --all -f -U SVAs_and_HERVs_KWHE.fasta -S SVAs_and_HERVs_KWHE.hg19.sam
+
+bowtie2 -x hg38 --no-unal --all -f -U SVAs_and_HERVs_KWHE.fasta -S SVAs_and_HERVs_KWHE.hg38.sam
+
+samtools view SVAs_and_HERVs_KWHE.hg19.sam | gawk 'BEGIN{OFS=","}{ print $1,$2,"hg19",$3,$4,$6}' &gt; hg19_alignments.csv
+
+samtools view SVAs_and_HERVs_KWHE.hg38.sam | gawk 'BEGIN{OFS=","}{ print $1,$2,"hg38",$3,$4,$6}' &gt; hg38_alignments.csv
+
+mysql -u root --local-infile aligned_development -e "LOAD DATA LOCAL INFILE 'hg19_alignments.csv'  INTO TABLE alignments  FIELDS TERMINATED BY ',' LINES TERMINATED BY '\n' (sequence,flags,reference,chromosome,position,cigar)"
+
+mysql -u root --local-infile aligned_development -e "LOAD DATA LOCAL INFILE 'hg38_alignments.csv'  INTO TABLE alignments  FIELDS TERMINATED BY ',' LINES TERMINATED BY '\n' (sequence,flags,reference,chromosome,position,cigar)"
+
+</pre>
+
+<%= link_to 'Search the results', alignments_path %>

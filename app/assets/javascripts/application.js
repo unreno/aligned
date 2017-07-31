@@ -12,4 +12,11 @@
 //
 //= require rails-ujs
 //= require turbolinks
+//= require jquery
 //= require_tree .
+
+$(document).on('turbolinks:load', function() {
+
+	$("table.tablesorter").tablesorter();
+
+});

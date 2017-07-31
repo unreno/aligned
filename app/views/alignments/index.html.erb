@@ -1,0 +1,66 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Alignments</h1>
+
+<div style='display:table'>
+<div style='display:table-row'>
+<div style='display:table-cell; width: 100px;'>
+
+<%= form_tag request.path, method: :get do %>
+	<%= label_tag 'reference' %>
+	<%= select_tag 'reference', options_for_select([ 'hg19', 'hg38' ], params[:reference]),
+		:prompt => '- Select -' %>
+	<%= label_tag 'chromosome' %>
+	<%= select_tag 'chromosome', options_for_select(
+		Alignment.select(:chromosome).distinct.order(:chromosome).collect(&:chromosome), params[:chromosome]),
+		:prompt => '- Select -' %>
+	<%= label_tag 'sequence' %>
+	<%= select_tag 'sequence', options_for_select(
+		Alignment.select(:sequence).distinct.order(:sequence).collect(&:sequence), params[:sequence]),
+		:prompt => '- Select -' %>
+	<%= submit_tag 'Filter', :name => nil %></p>
+<% end %>
+
+
+
+</div><!-- style='display:table-cell;' -->
+
+<div style='display:table-cell;'>
+
+<table class='tablesorter'>
+  <thead>
+    <tr>
+      <th>Sequence</th>
+      <th>Flags</th>
+      <th>Reference</th>
+      <th>Chromosome</th>
+      <th>Position</th>
+      <th>Cigar</th>
+<!--
+      <th colspan="3"></th>
+-->
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @alignments.each do |alignment| %>
+      <tr>
+        <td><%= alignment.sequence %></td>
+        <td><%= alignment.flags %></td>
+        <td><%= alignment.reference %></td>
+        <td><%= alignment.chromosome %></td>
+        <td><%= alignment.position %></td>
+        <td><%= alignment.cigar %></td>
+<!--
+        <td><%#= link_to 'Show', alignment %></td>
+        <td><%#= link_to 'Edit', edit_alignment_path(alignment) %></td>
+        <td><%#= link_to 'Destroy', alignment, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+-->
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+<p><%= @alignments.to_sql %></p>
+</div><!-- style='display:table-cell;' -->
+</div><!-- style='display:table-row' -->
+</div><!-- style='display:table' -->
