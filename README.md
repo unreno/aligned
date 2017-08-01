@@ -57,3 +57,13 @@ mysql -u root --local-infile aligned_development -e "LOAD DATA LOCAL INFILE 'hg3
 ```
 
 
+
+I noticed that, for HERVK113, the default --sensitive --end-to-end alignment finds a complete 100% match.
+Using --very-sensitive-local finds to matches at the same position but fails to make a complete match.
+I'm guessing that the presets are more appropriate for 100-200 bp reads, NOT 10,000.
+Perhaps I should try meddling with these values.
+
+
+
+
+
