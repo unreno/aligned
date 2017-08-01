@@ -32,10 +32,12 @@
     <tr>
       <th>Sequence</th>
       <th>Flags</th>
+      <th>Reverse?</th>
       <th>Reference</th>
       <th>Chromosome</th>
       <th>Position</th>
-      <th>Cigar</th>
+      <th>Percent&nbsp;M</th>
+      <th style='text-align: left;'>Cigar</th>
 <!--
       <th colspan="3"></th>
 -->
@@ -47,9 +49,11 @@
       <tr>
         <td><%= alignment.sequence %></td>
         <td><%= alignment.flags %></td>
+        <td><%= alignment.reverse? %></td>
         <td><%= alignment.reference %></td>
         <td><%= alignment.chromosome %></td>
         <td><%= alignment.position %></td>
+        <td><%= '%.2f' % alignment.percent_m %></td>
         <td><%= alignment.cigar %></td>
 <!--
         <td><%#= link_to 'Show', alignment %></td>
