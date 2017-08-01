@@ -1,6 +1,6 @@
 <p id="notice"><%= notice %></p>
 
-<h1>Alignments</h1>
+<h1><%= link_to "Alignments", root_path %> - <%= @alignments.count %> found</h1>
 
 <div style='display:table'>
 <div style='display:table-row'>
@@ -17,6 +17,10 @@
 	<%= label_tag 'sequence' %>
 	<%= select_tag 'sequence', options_for_select(
 		Alignment.select(:sequence).distinct.order(:sequence).collect(&:sequence), params[:sequence]),
+		:prompt => '- Select -' %>
+	<%= label_tag 'Min Percent M' %>
+	<%= select_tag 'percent_m', options_for_select(
+		(0..100).step(5).to_a, params[:percent_m]),
 		:prompt => '- Select -' %>
 	<%= submit_tag 'Filter', :name => nil %></p>
 <% end %>
@@ -36,6 +40,8 @@
       <th>Reference</th>
       <th>Chromosome</th>
       <th>Position</th>
+      <th>Length</th>
+      <th>Length&nbsp;M</th>
       <th>Percent&nbsp;M</th>
       <th style='text-align: left;'>Cigar</th>
 <!--
@@ -49,10 +55,12 @@
       <tr>
         <td><%= alignment.sequence %></td>
         <td><%= alignment.flags %></td>
-        <td><%= alignment.reverse? %></td>
+        <td><%= alignment.reverse %></td>
         <td><%= alignment.reference %></td>
         <td><%= alignment.chromosome %></td>
         <td><%= alignment.position %></td>
+        <td><%= alignment.length_all %></td>
+        <td><%= alignment.length_m %></td>
         <td><%= '%.2f' % alignment.percent_m %></td>
         <td><%= alignment.cigar %></td>
 <!--

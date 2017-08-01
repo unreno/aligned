@@ -3,15 +3,23 @@
 one:
   sequence: MyString
   flags: 1
+  reverse: 1
   reference: MyString
   chromosome: MyString
   position: 1
+  length_all: 1000
+  length_m: 900
+  percent_m: 90.0
   cigar: MyString
 
 two:
   sequence: MyString
   flags: 1
+  reverse: 0
   reference: MyString
   chromosome: MyString
   position: 1
+  length_all: 1000
+  length_m: 900
+  percent_m: 90.0
   cigar: MyString

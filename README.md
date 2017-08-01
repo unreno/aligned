@@ -38,24 +38,22 @@ For some reason, it appears that `bundle exec autotest` uses the develpoment env
 
 
 
-
 ```BASH
-bowtie2 -x hg19 --no-unal --all -f -U SVAs_and_HERVs_KWHE.fasta -S SVAs_and_HERVs_KWHE.hg19.sam
+bowtie2 --very-sensitive-local -x hg19 --no-unal --all -f -U SVAs_and_HERVs_KWHE.fasta -S SVAs_and_HERVs_KWHE.hg19.sam
 
-bowtie2 -x hg38 --no-unal --all -f -U SVAs_and_HERVs_KWHE.fasta -S SVAs_and_HERVs_KWHE.hg38.sam
+bowtie2 --very-sensitive-local -x hg38 --no-unal --all -f -U SVAs_and_HERVs_KWHE.fasta -S SVAs_and_HERVs_KWHE.hg38.sam
 
-samtools view SVAs_and_HERVs_KWHE.hg19.sam | gawk 'BEGIN{OFS=","}{ print $1,$2,"hg19",$3,$4,$6}' > hg19_alignments.csv
+samtools view SVAs_and_HERVs_KWHE.hg19.sam | gawk 'BEGIN{OFS=","}{ split($6,a,/[[:alpha:]]/,s); m=l=0; for(i=1;i<=length(s);i++){ l+=a[i]; if( s[i] == "M" ) m+=a[i]; } percent_m=100.0*m/l; reverse=and($2,16)==16; print $1,$2,reverse,"hg19",$3,$4,$6,m,l,percent_m;}' > hg19_alignments.csv
 
-samtools view SVAs_and_HERVs_KWHE.hg38.sam | gawk 'BEGIN{OFS=","}{ print $1,$2,"hg38",$3,$4,$6}' > hg38_alignments.csv
+samtools view SVAs_and_HERVs_KWHE.hg38.sam | gawk 'BEGIN{OFS=","}{ split($6,a,/[[:alpha:]]/,s); m=l=0; for(i=1;i<=length(s);i++){ l+=a[i]; if( s[i] == "M" ) m+=a[i]; } percent_m=100.0*m/l; reverse=and($2,16)==16; print $1,$2,reverse,"hg38",$3,$4,$6,m,l,percent_m;}' > hg38_alignments.csv
 
-mysql -u root --local-infile aligned_development -e "LOAD DATA LOCAL INFILE 'hg19_alignments.csv'  INTO TABLE alignments  FIELDS TERMINATED BY ',' LINES TERMINATED BY '\n' (sequence,flags,reference,chromosome,position,cigar)"
 
-mysql -u root --local-infile aligned_development -e "LOAD DATA LOCAL INFILE 'hg38_alignments.csv'  INTO TABLE alignments  FIELDS TERMINATED BY ',' LINES TERMINATED BY '\n' (sequence,flags,reference,chromosome,position,cigar)"
+mysql -u root aligned_development -e 'TRUNCATE alignments'
+
+
+mysql -u root --local-infile aligned_development -e "LOAD DATA LOCAL INFILE 'hg19_alignments.csv'  INTO TABLE alignments  FIELDS TERMINATED BY ',' LINES TERMINATED BY '\n' (sequence,flags,reverse,reference,chromosome,position,cigar,length_m,length_all,percent_m)"
+
+mysql -u root --local-infile aligned_development -e "LOAD DATA LOCAL INFILE 'hg38_alignments.csv'  INTO TABLE alignments  FIELDS TERMINATED BY ',' LINES TERMINATED BY '\n' (sequence,flags,reverse,reference,chromosome,position,cigar,length_m,length_all,percent_m)"
 ```
-
-
-
-
-
 
 

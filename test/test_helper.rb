@@ -1,13 +1,9 @@
+require 'simplecov_test_helper' # should be first for some reason
+
 require File.expand_path('../../config/environment', __FILE__)
 
-
-
-#	Rails 5.1 does not add these lines and autotest then uses the development database?
+#	Rails 5.1 does not add this line and autotest then uses the development database?
 #ENV['RAILS_ENV'] ||= 'test'
-#require File.expand_path('../../config/environment', __FILE__)
-
-
-
 
 require 'rails/test_help'
 

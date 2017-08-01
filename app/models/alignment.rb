@@ -1,16 +1,16 @@
 class Alignment < ApplicationRecord
 
-	#	c.scan(/[^[:alpha:]]*[[:alpha:]]/).collect(&:to_i)
-	def percent_m
-		ashes = cigar.scan(/[^[:alpha:]]*[[:alpha:]]/)
-		length = ashes.collect(&:to_i).sum
-		m_length = ashes.select{|a|a[/\d+M/]}.collect(&:to_i).sum
-		100.0 * m_length / length
-	end
-
-	def reverse?
-		( flags & 16 ) == 16
-	end
+#	#	c.scan(/[^[:alpha:]]*[[:alpha:]]/).collect(&:to_i)
+#	def percent_m
+#		ashes = cigar.scan(/[^[:alpha:]]*[[:alpha:]]/)
+#		length = ashes.collect(&:to_i).sum
+#		m_length = ashes.select{|a|a[/\d+M/]}.collect(&:to_i).sum
+#		100.0 * m_length / length
+#	end
+#
+#	def reverse?
+#		( flags & 16 ) == 16
+#	end
 
 #	Flags:
 #		1    0x1   PAIRED        .. paired-end (or multiple-segment) sequencing technology

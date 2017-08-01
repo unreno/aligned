@@ -15,12 +15,20 @@ ActiveRecord::Schema.define(version: 20170731203923) do
   create_table "alignments", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string "sequence"
     t.integer "flags"
+    t.boolean "reverse"
     t.string "reference"
     t.string "chromosome"
     t.integer "position"
     t.string "cigar"
+    t.integer "length_m"
+    t.integer "length_all"
+    t.float "percent_m", limit: 24
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["chromosome"], name: "index_alignments_on_chromosome"
+    t.index ["position"], name: "index_alignments_on_position"
+    t.index ["reference"], name: "index_alignments_on_reference"
+    t.index ["sequence"], name: "index_alignments_on_sequence"
   end
 
 end
