@@ -20,12 +20,16 @@ ActiveRecord::Schema.define(version: 20170731203923) do
     t.string "chromosome"
     t.integer "position"
     t.string "cigar"
-    t.integer "length_m"
+    t.integer "length_eq"
     t.integer "length_all"
-    t.float "percent_m", limit: 24
+    t.float "percent_eq", limit: 24
+    t.integer "edit_distance"
+    t.float "percent_ed", limit: 24
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["chromosome"], name: "index_alignments_on_chromosome"
+    t.index ["percent_ed"], name: "index_alignments_on_percent_ed"
+    t.index ["percent_eq"], name: "index_alignments_on_percent_eq"
     t.index ["position"], name: "index_alignments_on_position"
     t.index ["reference"], name: "index_alignments_on_reference"
     t.index ["sequence"], name: "index_alignments_on_sequence"

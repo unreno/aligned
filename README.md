@@ -37,23 +37,21 @@ For some reason, it appears that `bundle exec autotest` uses the develpoment env
 
 
 
-Using my modified bowtie2 2.2.9
+Using my modified bowtie2 2.2.9 which outputs = or X rather than just the ambiguous M.
+
 ```BASH
-bowtie2 --very-sensitive-local -x hg19 --no-unal --all -f -U SVAs_and_HERVs_KWHE.fasta -S SVAs_and_HERVs_KWHE.hg19.sam
+bowtie2 --very-sensitive -x hg19 --no-unal --all -f -U SVAs_and_HERVs_KWHE.fasta -S SVAs_and_HERVs_KWHE.hg19.vs.sam
+bowtie2 --very-sensitive-local -x hg19 --no-unal --all -f -U SVAs_and_HERVs_KWHE.fasta -S SVAs_and_HERVs_KWHE.hg19.vsl.sam
 
-bowtie2 --very-sensitive-local -x hg38 --no-unal --all -f -U SVAs_and_HERVs_KWHE.fasta -S SVAs_and_HERVs_KWHE.hg38.sam
+bowtie2 --very-sensitive -x hg38 --no-unal --all -f -U SVAs_and_HERVs_KWHE.fasta -S SVAs_and_HERVs_KWHE.hg38.vs.sam
+bowtie2 --very-sensitive-local -x hg38 --no-unal --all -f -U SVAs_and_HERVs_KWHE.fasta -S SVAs_and_HERVs_KWHE.hg38.vsl.sam
 
-samtools view SVAs_and_HERVs_KWHE.hg19.sam | gawk 'BEGIN{OFS=","}{ split($6,a,/[[:alpha:]=]/,s); eq=l=0; for(i=1;i<=length(s);i++){ l+=a[i]; if( s[i] == "=" ) eq+=a[i]; } percent_eq=100.0*eq/l; reverse=and($2,16)==16; ed=""; for(i=12;i<=NF;i++){ split($i,a,":"); if( a[1]=="NM" ) ed=a[3]; } percent_ed=100.0*ed/l; print $1,$2,reverse,"hg19",$3,$4,$6,eq,l,percent_eq,ed,percent_ed;}' > hg19_alignments.csv
-
-samtools view SVAs_and_HERVs_KWHE.hg38.sam | gawk 'BEGIN{OFS=","}{ split($6,a,/[[:alpha:]=]/,s); eq=l=0; for(i=1;i<=length(s);i++){ l+=a[i]; if( s[i] == "=" ) eq+=a[i]; } percent_eq=100.0*eq/l; reverse=and($2,16)==16; ed=""; for(i=12;i<=NF;i++){ split($i,a,":"); if( a[1]=="NM" ) ed=a[3]; }; percent_ed=100.0*ed/l; print $1,$2,reverse,"hg38",$3,$4,$6,eq,l,percent_eq,ed,percent_ed;}' > hg38_alignments.csv
+gawk 'BEGIN{OFS=","}( /^@/ ){ next; }{ ref=(FILENAME~/hg19/)?"hg19":"hg38"; split($6,a,/[[:alpha:]=]/,s); eq=l=0; for(i=1;i<=length(s);i++){ l+=a[i]; if( s[i] == "=" ) eq+=a[i]; } percent_eq=100.0*eq/l; reverse=and($2,16)==16; ed=""; for(i=12;i<=NF;i++){ split($i,a,":"); if( a[1]=="NM" ) ed=a[3]; } percent_ed=100.0*ed/l; print $1,$2,reverse,"hg19",$3,$4,$6,eq,l,percent_eq,ed,percent_ed;}' SVAs_and_HERVs_KWHE.hg*.vs*.sam > alignments.csv
 
 
 mysql -u root aligned_development -e 'TRUNCATE alignments'
 
-
-mysql -u root --local-infile aligned_development -e "LOAD DATA LOCAL INFILE 'hg19_alignments.csv'  INTO TABLE alignments  FIELDS TERMINATED BY ',' LINES TERMINATED BY '\n' (sequence,flags,reverse,reference,chromosome,position,cigar,length_eq,length_all,percent_eq,edit_distance,percent_ed)"
-
-mysql -u root --local-infile aligned_development -e "LOAD DATA LOCAL INFILE 'hg38_alignments.csv'  INTO TABLE alignments  FIELDS TERMINATED BY ',' LINES TERMINATED BY '\n' (sequence,flags,reverse,reference,chromosome,position,cigar,length_eq,length_all,percent_eq,edit_distance,percent_ed)"
+mysql -u root --local-infile aligned_development -e "LOAD DATA LOCAL INFILE 'alignments.csv'  INTO TABLE alignments  FIELDS TERMINATED BY ',' LINES TERMINATED BY '\n' (sequence,flags,reverse,reference,chromosome,position,cigar,length_eq,length_all,percent_eq,edit_distance,percent_ed)"
 ```
 
 
