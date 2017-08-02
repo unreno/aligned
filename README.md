@@ -66,4 +66,6 @@ Perhaps I should try meddling with these values.
 
 
 
+percent_m is not as meaningful as expected. M can mean match or mismatch. Very sad that bowtie2 uses this SAM format allowed ambiguity. The CIGAR string needs to be used with great caution. The fields after the 11th column should be considered.
+
 
