@@ -18,9 +18,13 @@
 	<%= select_tag 'sequence', options_for_select(
 		Alignment.select(:sequence).distinct.order(:sequence).collect(&:sequence), params[:sequence]),
 		:prompt => '- Select -' %>
-	<%= label_tag 'Min Percent M' %>
-	<%= select_tag 'percent_m', options_for_select(
-		(0..100).step(5).to_a, params[:percent_m]),
+	<%= label_tag 'Min Percent Eq' %>
+	<%= select_tag 'percent_eq', options_for_select(
+		(0..100).step(5).to_a, params[:percent_eq]),
+		:prompt => '- Select -' %>
+	<%= label_tag 'Max Percent ED' %>
+	<%= select_tag 'percent_ed', options_for_select(
+		(0..100).step(5).to_a, params[:percent_ed]),
 		:prompt => '- Select -' %>
 	<%= submit_tag 'Filter', :name => nil %></p>
 <% end %>
@@ -41,8 +45,10 @@
       <th>Chromosome</th>
       <th>Position</th>
       <th>Length</th>
-      <th>Length&nbsp;M</th>
-      <th>Percent&nbsp;M</th>
+      <th>Length&nbsp;Eq</th>
+      <th>Percent&nbsp;Eq</th>
+      <th>Edit&nbsp;Distance</th>
+      <th>Percent&nbsp;ED</th>
       <th style='text-align: left;'>Cigar</th>
 <!--
       <th colspan="3"></th>
@@ -60,8 +66,10 @@
         <td><%= alignment.chromosome %></td>
         <td><%= alignment.position %></td>
         <td><%= alignment.length_all %></td>
-        <td><%= alignment.length_m %></td>
-        <td><%= '%.2f' % alignment.percent_m %></td>
+        <td><%= alignment.length_eq %></td>
+        <td><%= '%.2f' % alignment.percent_eq %></td>
+        <td><%= alignment.edit_distance %></td>
+        <td><%= '%.2f' % alignment.percent_ed %></td>
         <td><%= alignment.cigar %></td>
 <!--
         <td><%#= link_to 'Show', alignment %></td>

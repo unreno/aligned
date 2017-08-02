@@ -37,23 +37,23 @@ For some reason, it appears that `bundle exec autotest` uses the develpoment env
 
 
 
-
+Using my modified bowtie2 2.2.9
 ```BASH
 bowtie2 --very-sensitive-local -x hg19 --no-unal --all -f -U SVAs_and_HERVs_KWHE.fasta -S SVAs_and_HERVs_KWHE.hg19.sam
 
 bowtie2 --very-sensitive-local -x hg38 --no-unal --all -f -U SVAs_and_HERVs_KWHE.fasta -S SVAs_and_HERVs_KWHE.hg38.sam
 
-samtools view SVAs_and_HERVs_KWHE.hg19.sam | gawk 'BEGIN{OFS=","}{ split($6,a,/[[:alpha:]]/,s); m=l=0; for(i=1;i<=length(s);i++){ l+=a[i]; if( s[i] == "M" ) m+=a[i]; } percent_m=100.0*m/l; reverse=and($2,16)==16; print $1,$2,reverse,"hg19",$3,$4,$6,m,l,percent_m;}' > hg19_alignments.csv
+samtools view SVAs_and_HERVs_KWHE.hg19.sam | gawk 'BEGIN{OFS=","}{ split($6,a,/[[:alpha:]=]/,s); eq=l=0; for(i=1;i<=length(s);i++){ l+=a[i]; if( s[i] == "=" ) eq+=a[i]; } percent_eq=100.0*eq/l; reverse=and($2,16)==16; ed=""; for(i=12;i<=NF;i++){ split($i,a,":"); if( a[1]=="NM" ) ed=a[3]; } percent_ed=100.0*ed/l; print $1,$2,reverse,"hg19",$3,$4,$6,eq,l,percent_eq,ed,percent_ed;}' > hg19_alignments.csv
 
-samtools view SVAs_and_HERVs_KWHE.hg38.sam | gawk 'BEGIN{OFS=","}{ split($6,a,/[[:alpha:]]/,s); m=l=0; for(i=1;i<=length(s);i++){ l+=a[i]; if( s[i] == "M" ) m+=a[i]; } percent_m=100.0*m/l; reverse=and($2,16)==16; print $1,$2,reverse,"hg38",$3,$4,$6,m,l,percent_m;}' > hg38_alignments.csv
+samtools view SVAs_and_HERVs_KWHE.hg38.sam | gawk 'BEGIN{OFS=","}{ split($6,a,/[[:alpha:]=]/,s); eq=l=0; for(i=1;i<=length(s);i++){ l+=a[i]; if( s[i] == "=" ) eq+=a[i]; } percent_eq=100.0*eq/l; reverse=and($2,16)==16; ed=""; for(i=12;i<=NF;i++){ split($i,a,":"); if( a[1]=="NM" ) ed=a[3]; }; percent_ed=100.0*ed/l; print $1,$2,reverse,"hg38",$3,$4,$6,eq,l,percent_eq,ed,percent_ed;}' > hg38_alignments.csv
 
 
 mysql -u root aligned_development -e 'TRUNCATE alignments'
 
 
-mysql -u root --local-infile aligned_development -e "LOAD DATA LOCAL INFILE 'hg19_alignments.csv'  INTO TABLE alignments  FIELDS TERMINATED BY ',' LINES TERMINATED BY '\n' (sequence,flags,reverse,reference,chromosome,position,cigar,length_m,length_all,percent_m)"
+mysql -u root --local-infile aligned_development -e "LOAD DATA LOCAL INFILE 'hg19_alignments.csv'  INTO TABLE alignments  FIELDS TERMINATED BY ',' LINES TERMINATED BY '\n' (sequence,flags,reverse,reference,chromosome,position,cigar,length_eq,length_all,percent_eq,edit_distance,percent_ed)"
 
-mysql -u root --local-infile aligned_development -e "LOAD DATA LOCAL INFILE 'hg38_alignments.csv'  INTO TABLE alignments  FIELDS TERMINATED BY ',' LINES TERMINATED BY '\n' (sequence,flags,reverse,reference,chromosome,position,cigar,length_m,length_all,percent_m)"
+mysql -u root --local-infile aligned_development -e "LOAD DATA LOCAL INFILE 'hg38_alignments.csv'  INTO TABLE alignments  FIELDS TERMINATED BY ',' LINES TERMINATED BY '\n' (sequence,flags,reverse,reference,chromosome,position,cigar,length_eq,length_all,percent_eq,edit_distance,percent_ed)"
 ```
 
 
@@ -67,5 +67,14 @@ Perhaps I should try meddling with these values.
 
 
 percent_m is not as meaningful as expected. M can mean match or mismatch. Very sad that bowtie2 uses this SAM format allowed ambiguity. The CIGAR string needs to be used with great caution. The fields after the 11th column should be considered.
+
+
+bowtie2 actually has = and X, but the code explicitly replaces them with Ms?
+Recompiling bowtie2 from source
+
+sed -i -e 's;^prefix = /usr/local$;prefix = /Users/jakewendt/.local;' Makefile
+sed -i -e 's/buildCigar(false);/buildCigar(true);/' aln_sink.cpp
+INC="-L /opt/local/lib/" make -e
+make install
 
 

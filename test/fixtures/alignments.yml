@@ -8,8 +8,8 @@ one:
   chromosome: MyString
   position: 1
   length_all: 1000
-  length_m: 900
-  percent_m: 90.0
+  length_eq: 900
+  percent_eq: 90.0
   cigar: MyString
 
 two:
@@ -20,6 +20,6 @@ two:
   chromosome: MyString
   position: 1
   length_all: 1000
-  length_m: 900
-  percent_m: 90.0
+  length_eq: 900
+  percent_eq: 90.0
   cigar: MyString
