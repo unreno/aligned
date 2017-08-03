@@ -7,26 +7,30 @@
 <div style='display:table-cell; width: 100px;'>
 
 <%= form_tag request.path, method: :get do %>
-	<%= label_tag 'reference' %>
+	<p><%= label_tag 'reference' %>
 	<%= select_tag 'reference', options_for_select([ 'hg19', 'hg38' ], params[:reference]),
-		:prompt => '- Select -' %>
-	<%= label_tag 'chromosome' %>
+		:prompt => '- Select -' %></p>
+	<p><%= label_tag 'chromosome' %>
 	<%= select_tag 'chromosome', options_for_select(
-		Alignment.select(:chromosome).distinct.order(:chromosome).collect(&:chromosome), params[:chromosome]),
-		:prompt => '- Select -' %>
-	<%= label_tag 'sequence' %>
+		Alignment.select(:chromosome).distinct.order(
+'(IF( CAST(SUBSTRING(chromosome, 4, 2) AS INT) > 0, 
+	CAST(SUBSTRING(chromosome, 4, 2) AS INT), 
+	IF( SUBSTRING(chromosome, 4, 1) = "U", 24, 23 ) ) ) ASC'
+).order(:chromosome).collect(&:chromosome), params[:chromosome]),
+		:prompt => '- Select -' %></p>
+	<p><%= label_tag 'sequence' %>
 	<%= select_tag 'sequence', options_for_select(
 		Alignment.select(:sequence).distinct.order(:sequence).collect(&:sequence), params[:sequence]),
-		:prompt => '- Select -' %>
-	<%= label_tag 'Min Percent Eq' %>
+		:prompt => '- Select -' %></p>
+	<p><%= label_tag 'Min Percent Eq' %>
 	<%= select_tag 'percent_eq', options_for_select(
 		(0..100).step(5).to_a, params[:percent_eq]),
-		:prompt => '- Select -' %>
-	<%= label_tag 'Max Percent ED' %>
+		:prompt => '- Select -' %></p>
+	<p><%= label_tag 'Max Percent ED' %>
 	<%= select_tag 'percent_ed', options_for_select(
 		(0..100).step(5).to_a, params[:percent_ed]),
-		:prompt => '- Select -' %>
-	<%= submit_tag 'Filter', :name => nil %></p>
+		:prompt => '- Select -' %></p>
+	<p><%= submit_tag 'Filter', :name => nil %></p>
 <% end %>
 
 
