@@ -13,3 +13,25 @@
  *= require_tree .
  *= require_self
  */
+
+
+button, input, select, label{
+	font-size: 12pt;
+}
+button, input[type=submit]{
+	font-weight: bold;
+	padding: 6px 20px;
+	cursor: pointer;
+
+	/* http://css-radius.heroku.com */
+	-webkit-border-radius: 10px;
+	-moz-border-radius: 10px;
+	border-radius: 10px;
+
+	/* for webkit browsers */
+	background: -webkit-gradient(linear, left top, left bottom, from(#FFFFFF), to(#DDDDDD));
+	/* for firefox 3.6+  */
+	background: -moz-linear-gradient(top,  #FFFFFF,  #DDDDDD);
+	/* for ie , but doesn't seem to work as expected despite other examples working */
+	filter: progid:DXImageTransform.Microsoft.gradient(StartColorStr='#FFFFFF', EndColorStr='#DDDDDD');
+}
