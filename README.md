@@ -46,12 +46,12 @@ bowtie2 --very-sensitive-local -x hg19 --no-unal --all -f -U SVAs_and_HERVs_KWHE
 bowtie2 --very-sensitive -x hg38 --no-unal --all -f -U SVAs_and_HERVs_KWHE.fasta -S SVAs_and_HERVs_KWHE.hg38.vs.sam
 bowtie2 --very-sensitive-local -x hg38 --no-unal --all -f -U SVAs_and_HERVs_KWHE.fasta -S SVAs_and_HERVs_KWHE.hg38.vsl.sam
 
-gawk 'BEGIN{OFS=","}( /^@/ ){ next; }{ ref=(FILENAME~/hg19/)?"hg19":"hg38"; split($6,a,/[[:alpha:]=]/,s); eq=l=0; for(i=1;i<=length(s);i++){ l+=a[i]; if( s[i] == "=" ) eq+=a[i]; } percent_eq=100.0*eq/l; reverse=and($2,16)==16; ed=""; for(i=12;i<=NF;i++){ split($i,a,":"); if( a[1]=="NM" ) ed=a[3]; } percent_ed=100.0*ed/l; print $1,$2,reverse,"hg19",$3,$4,$6,eq,l,percent_eq,ed,percent_ed;}' SVAs_and_HERVs_KWHE.hg*.vs*.sam > alignments.csv
+gawk 'BEGIN{OFS=","}( /^@/ ){ next; }{ ref=(FILENAME~/hg19/)?"hg19":"hg38"; split($6,a,/[[:alpha:]=]/,s); eq=l=0; for(i=1;i<=length(s);i++){ l+=a[i]; if( s[i] == "=" ) eq+=a[i]; } percent_eq=100.0*eq/l; reverse=and($2,16)==16; ed=""; for(i=12;i<=NF;i++){ split($i,a,":"); if( a[1]=="NM" ) ed=a[3]; } percent_ed=100.0*ed/l; print $1,$2,reverse,ref,$3,$4,$6,eq,l,percent_eq,ed,percent_ed;}' SVAs_and_HERVs_KWHE.hg*.vs*.sam > alignments.csv
 
 
 mysql -u root aligned_development -e 'TRUNCATE alignments'
 
-mysql -u root --local-infile aligned_development -e "LOAD DATA LOCAL INFILE 'alignments.csv'  INTO TABLE alignments  FIELDS TERMINATED BY ',' LINES TERMINATED BY '\n' (sequence,flags,reverse,reference,chromosome,position,cigar,length_eq,length_all,percent_eq,edit_distance,percent_ed)"
+mysql -u root --local-infile aligned_development -e "LOAD DATA LOCAL INFILE 'alignments.csv' INTO TABLE alignments FIELDS TERMINATED BY ',' LINES TERMINATED BY '\n' (sequence,flags,reverse,reference,chromosome,position,cigar,length_eq,length_all,percent_eq,edit_distance,percent_ed)"
 ```
 
 

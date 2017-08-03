@@ -12,7 +12,7 @@ class AlignmentsController < ApplicationController
 		@alignments = @alignments.where(
 			Alignment.arel_table[:percent_eq].gteq(params[:percent_eq]))
 		@alignments = @alignments.where(
-			Alignment.arel_table[:percent_ed].lteq(params[:percent_ed]))
+			Alignment.arel_table[:percent_ed].lteq(params[:percent_ed])) if params[:percent_ed].present?
 	end
 
 #	# GET /alignments/1
