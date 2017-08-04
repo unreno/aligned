@@ -29,9 +29,19 @@ gawk 'BEGIN{OFS=","}
 	print $1,$2,reverse,ref,$3,$4,$6,eq,l,percent_eq,ed,percent_ed;
 }' SVAs_and_HERVs_KWHE.hg*.vs*.sam &gt; alignments.csv
 
+
+#	Development
 mysql -u root aligned_development -e 'TRUNCATE alignments'
 
 mysql -u root --local-infile aligned_development -e "
+	LOAD DATA LOCAL INFILE 'alignments.csv'
+	INTO TABLE alignments FIELDS TERMINATED BY ',' LINES TERMINATED BY '\n'
+	(sequence,flags,reverse,reference,chromosome,position,cigar,length_eq,length_all,percent_eq,edit_distance,percent_ed)"
+
+#	Or Production
+mysql -u root aligned_production -e 'TRUNCATE alignments'
+
+mysql -u root -p --local-infile aligned_production -e "
 	LOAD DATA LOCAL INFILE 'alignments.csv'
 	INTO TABLE alignments FIELDS TERMINATED BY ',' LINES TERMINATED BY '\n'
 	(sequence,flags,reverse,reference,chromosome,position,cigar,length_eq,length_all,percent_eq,edit_distance,percent_ed)"
