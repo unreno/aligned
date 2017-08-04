@@ -55,6 +55,11 @@ end
 
 
 
+
+
+
+
+
 #group :test do
 
 	#	For pretty printing
@@ -82,3 +87,4 @@ gem 'jquery-rails'
 
 gem 'rails-controller-testing'
 
+gem 'therubyracer', platforms: :ruby		#	likely needed in production
