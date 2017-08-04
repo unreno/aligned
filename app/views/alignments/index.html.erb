@@ -13,11 +13,12 @@
 	<p><%= label_tag 'chromosome' %>
 	<%= select_tag 'chromosome', options_for_select(
 		Alignment.select(:chromosome).distinct.order(
-'(IF( CAST(SUBSTRING(chromosome, 4, 2) AS INT) > 0, 
-	CAST(SUBSTRING(chromosome, 4, 2) AS INT), 
+'(IF( CAST(SUBSTRING(chromosome, 4, 2) AS UNSIGNED) > 0, 
+	CAST(SUBSTRING(chromosome, 4, 2) AS UNSIGNED), 
 	IF( SUBSTRING(chromosome, 4, 1) = "U", 24, 23 ) ) ) ASC'
 ).order(:chromosome).collect(&:chromosome), params[:chromosome]),
 		:prompt => '- Select -' %></p>
+<%# CASTing to INT works in development, but needs to be UNSIGNED or SIGNED in production %>
 	<p><%= label_tag 'sequence' %>
 	<%= select_tag 'sequence', options_for_select(
 		Alignment.select(:sequence).distinct.order(:sequence).collect(&:sequence), params[:sequence]),

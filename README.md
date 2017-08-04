@@ -52,6 +52,10 @@ gawk 'BEGIN{OFS=","}(FNR==1){ ref=(FILENAME~/hg19/)?"hg19":"hg38"; }( /^@/ ){ ne
 mysql -u root aligned_development -e 'TRUNCATE alignments'
 
 mysql -u root --local-infile aligned_development -e "LOAD DATA LOCAL INFILE 'alignments.csv' INTO TABLE alignments FIELDS TERMINATED BY ',' LINES TERMINATED BY '\n' (sequence,flags,reverse,reference,chromosome,position,cigar,length_eq,length_all,percent_eq,edit_distance,percent_ed)"
+
+
+#	Production
+mysql -u root -p --local-infile aligned_production -e "LOAD DATA LOCAL INFILE 'alignments.csv' INTO TABLE alignments FIELDS TERMINATED BY ',' LINES TERMINATED BY '\n' (sequence,flags,reverse,reference,chromosome,position,cigar,length_eq,length_all,percent_eq,edit_distance,percent_ed)"
 ```
 
 
