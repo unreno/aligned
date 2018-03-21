@@ -88,3 +88,9 @@ gem 'jquery-rails'
 gem 'rails-controller-testing'
 
 gem 'therubyracer', platforms: :ruby		#	likely needed in production
+
+
+#	libv8 / therubyrace install issues
+#	port uninstall libtool
+#	port select gcc none
+#	port install libtool

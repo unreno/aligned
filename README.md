@@ -80,3 +80,10 @@ INC="-L /opt/local/lib/" make -e
 make install
 
 
+
+
+
+New versions of bowtie2 won't need the "buildCigar" modification
+Next time, change "reverse:true,false" to "direction:R,F"
+
+
