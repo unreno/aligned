@@ -73,7 +73,8 @@ end
 	gem "mocha"	#, :require => 'mocha/api'
 	#	mocha requires "require 'mocha/mini_test'" near the bottom of test/test_helper.rb
 
-	gem "factory_girl_rails"
+#	gem "factory_girl_rails"
+	gem "factory_bot_rails"
 
 	gem "autotest-rails", :require => 'autotest/rails'
 
