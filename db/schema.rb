@@ -15,11 +15,12 @@ ActiveRecord::Schema.define(version: 20170731203923) do
   create_table "alignments", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string "sequence"
     t.integer "flags"
-    t.boolean "reverse"
+    t.string "direction", limit: 1
     t.string "reference"
     t.string "chromosome"
     t.integer "position"
     t.string "cigar"
+    t.integer "alignment_score"
     t.integer "length_eq"
     t.integer "length_all"
     t.float "percent_eq", limit: 24

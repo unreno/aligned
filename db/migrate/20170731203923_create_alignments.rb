@@ -3,11 +3,13 @@ class CreateAlignments < ActiveRecord::Migration[5.1]
 		create_table :alignments do |t|
 			t.string :sequence
 			t.integer :flags
-			t.boolean :reverse
+#			t.boolean :reverse
+			t.string :direction, limit: 1
 			t.string :reference
 			t.string :chromosome
 			t.integer :position
 			t.string :cigar				#, limit: 1024
+			t.integer :alignment_score
 			t.integer :length_eq
 			t.integer :length_all
 			t.float :percent_eq
