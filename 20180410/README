@@ -1,0 +1,65 @@
+
+
+awk -F, '{print $1}' alignments.csv | sort | uniq -c
+   1667 HERVE
+   7569 HERVH
+    328 HERVH48I
+    983 HERVK
+  20306 HERVK10
+  27619 HERVK11
+  26680 HERVK113
+  16201 HERVK113LTR
+  15371 HERVK119
+    136 HERVK11DI
+    806 HERVK11I
+     56 HERVK13I
+    300 HERVK14CI
+   1157 HERVK14I
+   1012 HERVK22I
+    538 HERVK3I
+   1849 HERVK9I
+    392 HERVKC4
+   3563 HERVW17
+  52193 SVA_A
+  99751 SVA_B
+ 102096 SVA_C
+  73321 SVA_D
+  49341 SVA_E
+  90205 SVA_F
+
+
+
+filter alignments to just 
+
+sequence,flags,direction,reference,chromosome,
+position,cigar,alignment_score,length_eq,length_all,
+percent_eq,edit_distance,percent_ed
+
+awk -F, '( $1 == "HERVK113LTR" && $4 == "hg19_no_alts" && $11 > 90 ){print}' alignments.csv > hg19_no_alts.hervk113ltr.filtered.csv
+
+
+Select just the positions. uniq because the same position may show when aligning end-to-end and locally.
+
+awk -F, '{print $5":"$6}' hg19_no_alts.hervk113ltr.filtered.csv | sort | uniq > hg19_no_alts.hervk113ltr.positions.txt
+
+
+cp hg19_no_alts.hervk113ltr.positions.txt ~/s3/herv/1000genomes/20180405.1000genomes.apobec_vcf/
+
+
+
+awk -F, '( $1 == "HERVK113LTR" && $4 == "hg38" && $11 > 90 ){print}' alignments.csv > hg38.hervk113ltr.filtered.csv
+awk -F, '{print $5":"$6}' hg38.hervk113ltr.filtered.csv | sort | uniq > hg38.hervk113ltr.positions.txt
+cp hg38.hervk113ltr.positions.txt ~/s3/herv/from_genepi/TCGA_Glioma_HERV52/20180330.apobec/
+
+
+
+awk 'BEGIN{FS=OFS=","}( $1 == "HERVK113LTR" && $4 == "hg38" && $11 > 80 ){print "LTR",$1,$5,$6}' alignments.csv > hg38.20180412.filtered.csv
+awk 'BEGIN{FS=OFS=","}( $1 ~ "SVA" && $4 == "hg38" && $11 > 80 ){print "SVA",$1,$5,$6 }' alignments.csv >> hg38.20180412.filtered.csv
+awk 'BEGIN{FS=OFS=","}( $1 == "HERVW17" && $4 == "hg38" && $11 > 50 ){print "HERVW",$1,$5,$6 }' alignments.csv >> hg38.20180412.filtered.csv
+awk 'BEGIN{FS=OFS=","}( $1 ~ "HERVH" && $4 == "hg38" && $11 > 50 ){print "HERVH",$1,$5,$6 }' alignments.csv >> hg38.20180412.filtered.csv
+awk 'BEGIN{FS=OFS=","}( $1 ~ "HERVK" && $1 !~ "LTR" && $4 == "hg38" && $11 > 70 ){print "HERVK",$1,$5,$6 }' alignments.csv >> hg38.20180412.filtered.csv
+
+sort hg38.20180412.filtered.csv | uniq > hg38.20180412.positions.txt
+
+cp hg38.20180412.positions.txt ~/s3/herv/from_genepi/TCGA_Glioma_HERV52/20180330.apobec/
+
