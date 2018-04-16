@@ -8,7 +8,7 @@ class AlignmentsController < ApplicationController
 		@alignments = @alignments.where(reference: params[:reference]) if params[:reference].present?
 		@alignments = @alignments.where(chromosome: params[:chromosome]) if params[:chromosome].present?
 		@alignments = @alignments.where(sequence: params[:sequence]) if params[:sequence].present?
-		params[:percent_eq] = 80 if params[:percent_eq].blank?
+		params[:percent_eq] = 90 if params[:percent_eq].blank?
 		@alignments = @alignments.where(
 			Alignment.arel_table[:percent_eq].gteq(params[:percent_eq]))
 		@alignments = @alignments.where(
