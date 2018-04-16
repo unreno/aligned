@@ -52,7 +52,7 @@ mysql -u root --local-infile aligned_development -e "
   (sequence,flags,direction,reference,chromosome,position,cigar,alignment_score,length_eq,length_all,percent_eq,edit_distance,percent_ed)"
 
 #	Or Production
-mysql -u root aligned_production -e 'TRUNCATE alignments'
+mysql -u root -p aligned_production -e 'TRUNCATE alignments'
 
 mysql -u root -p --local-infile aligned_production -e "
   LOAD DATA LOCAL INFILE 'alignments.csv'
