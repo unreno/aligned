@@ -17,9 +17,9 @@
 	<p><%= label_tag 'chromosome' %>
 	<%= select_tag 'chromosome', options_for_select(
 		Alignment.select(:chromosome).distinct.order(
-'(IF( CAST(SUBSTRING(chromosome, 4, 2) AS UNSIGNED) > 0, 
+Arel.sql('(IF( CAST(SUBSTRING(chromosome, 4, 2) AS UNSIGNED) > 0, 
 	CAST(SUBSTRING(chromosome, 4, 2) AS UNSIGNED), 
-	IF( SUBSTRING(chromosome, 4, 1) = "U", 24, 23 ) ) ) ASC'
+	IF( SUBSTRING(chromosome, 4, 1) = "U", 24, 23 ) ) ) ASC')
 ).order(:chromosome).collect(&:chromosome), params[:chromosome]),
 		:prompt => '- Select -' %></p>
 <%# CASTing to INT works in development, but needs to be UNSIGNED or SIGNED in production %>
